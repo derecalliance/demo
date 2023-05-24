@@ -1,0 +1,15 @@
+{
+  "name": "socket-io-expo-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Dipti Mahamuni",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.10",
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
+  }
+}

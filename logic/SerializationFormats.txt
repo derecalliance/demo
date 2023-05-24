@@ -1,0 +1,145 @@
+
+Serialization format
+
+
+SecretShare of Lockbox
++-------------------------------------------+
+| Share of Lockbox length: uint16           |
++-------------------------------------------+
+| Share of Lockbox: u8Array                 |
++-------------------------------------------+
+| Encrypted Helpers & Vault length (uint 16)|
++-------------------------------------------+
+| Encrypted Helpers & Vault (u8Array)       |
++-------------------------------------------+
+
+
+
+Lockbox:
++-------------------------------------------+
+| Lockbox encryption key length (uint 16)   |
++-------------------------------------------+
+| Lockbox encryption key (u8Array)          |
++-------------------------------------------+
+| Lockbox encryption nonce length (uint 16) |
++-------------------------------------------+
+| Lockbox encryption nonce (u8Array)        |
++-------------------------------------------+
+
+
+AccountVault
++-------------------------------+
+| type (uint 8)                 |
++-------------------------------+
+| numElements (uint 16)         |
++-------------------------------+
+|  elements (Account)           | } repeated
++-------------------------------+
+
+
+Helpers:
++-------------------------------+
+| numHelpers (uint 16)          |
++-------------------------------+
+| Helper (u8Array)              | } Repeated
++-------------------------------+
+
+Helper  
++-------------------------------+   
+| User (u8Array)                |     
++-------------------------------+   
+| Helper state: (uint 8)        |   
++-------------------------------+   
+| pairingSession: PairingSession|  
++-------------------------------+   
+| operatingMode: Boolean (Uint 8)|   
++-------------------------------+   
+No Lockbox share because we don't send peer's helpers to our helpers 
+
+
+User
++-------------------------------+   
+| Length of Name (uint 16)      |   
++-------------------------------+   
+| utf-8 Name (u8Array)          |   
++-------------------------------+
+| Length of Phone (uint 16)     |   
++-------------------------------+   
+| utf-8 Phone (u8Array)         |   
++-------------------------------+
+
+Pairing Session
++-------------------------------+
+| keys: KEYS                    |
++-------------------------------+
+| length of IV                  |
++-------------------------------+
+| iv: Uint8Array                |
++-------------------------------+
+| peerPublicKeyType             |
++-------------------------------+
+| length of peer public key     |
++-------------------------------+
+| peerPublicKey: Uint8Array     |
++-------------------------------+
+| Session KeyType               |
++-------------------------------+
+| length of sesion key          |
++-------------------------------+
+| sessionKey: Uint8Array        |
++-------------------------------+
+
+
+
+KEYS:
++-------------------------------+
+|   Key Type: uint8             |
++-------------------------------+
+| public key length (uint 16)   |
++-------------------------------+
+|   publicKey: Uint8Array       |
++-------------------------------+
+| Private key length (uint 16)  |
++-------------------------------+
+|   privateKey: Uint8Array;     |
++-------------------------------+
+
+
+
+Account
++-------------------------------+
+| Id length (uint 16)           |
++-------------------------------+
+|  id: Uint8Array;              |
++-------------------------------+
+| Name length (uint 16)         |
++-------------------------------+
+|  Name: Uint8Array;            |
++-------------------------------+
+| Key                           |
++-------------------------------+
+| Network length (uint 16)      |
++-------------------------------+
+|  Network: Uint8Array;         |
++-------------------------------+
+
+
+
+
+Helper state: (uint 8) 0: Pending, 1: Paired
+Key Type (0: ED25519, 1: ECDSA)
+Recovery Mode: 0: Normal, 1: Recovery
+Vault Type: 0: Account Type
+
+
+
+Phases:
+THere are 2 modes of opeartion: Normal operations, and Recovery.
+Both of these operating modes involve pairing with the helper followed by other message exchanges.
+For example, in the normal mode, the helpers first pair with each other and then exchange regular keep alive messages, and also any update messages containing their lockboxe shares. In the recovery mode, they pair again in the same way, but then the recovering helper requests retrieval of previosly shared lockbox share.
+
+The complete set of messages between the two peer are:
+
+
+      Peer: Alice                             Peer: Bob
+         |
